@@ -13,7 +13,7 @@ The implemented algorithms are:
 - Compressive Sensing Gerchberg-Saxton (CSGS)
 - Weighted Compressive Sensing Gerchberg-Saxton (WCSGS)
 
-RS, GS and WGS are implemented as reported in the paper:
-"Di Leonardo et Al. "Computer generation of optimal holograms for optical trap arrays." Optics Express 15.4 (2007): 1913-1922.".
-
+RS, GS and WGS are implemented as reported in the paper by Di Leonardo et Al. (https://doi.org/10.1364/OE.15.001913).
 A complete description of CSGS and WCSGS will be presented in an upcoming publication.
+
+If you use this code for academic research, please consider citing the reported literature.
