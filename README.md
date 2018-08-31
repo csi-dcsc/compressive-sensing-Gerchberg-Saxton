@@ -1,5 +1,5 @@
 # compressive-sensing-Gerchberg-Saxton
-Software implementation of multiple algorithms for the generation of 3D optogenetics photostimulation patterns with phase-only spatial light modulators
+Software implementation of multiple algorithms for the generation of 3D multi-foci patterns with phase-only spatial light modulators, for applications including optogenetics, neural imaging and optical tweezers.
 
 The software is written for Python 2.7.x , and its only external dependency is numpy. The code consists in 5 functions implementing different algorithms for the calculation of holograms for three dimensional optogenetics stimulation with phase only spatial light modulators.
 
