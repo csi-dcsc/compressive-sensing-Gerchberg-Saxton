@@ -14,6 +14,6 @@ The implemented algorithms are:
 - Weighted Compressive Sensing Gerchberg-Saxton (WCSGS)
 
 RS, GS and WGS are implemented as reported in the paper by Di Leonardo et Al. (https://doi.org/10.1364/OE.15.001913).
-A complete description of CSGS and WCSGS will be presented in an upcoming publication.
+A complete description of CSGS and WCSGS is presented in our publication "Fast Calculation of Computer Generated Holograms for 3D Photostimulation through Compressive-Sensing Gerchberg–Saxton Algorithm" (https://doi.org/10.3390/mps2010002).
 
 If you use this code for academic research, please consider citing the reported literature.
