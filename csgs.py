@@ -1,9 +1,11 @@
+from __future__ import print_function
 import numpy
 import time
-
-
-
-
+import sys
+if sys.version_info[0] < 3:
+    get_time=time.clock
+else:
+    get_time=time.perf_counter
 
 #For all five functions, x,y,z are one-dimensional arrays of floats with coordinates in micrometers, f is a float with the
 #equivalent focal of the system in mm, d is a float with the pixel size in micrometers, lam is the wavelength used in
@@ -13,7 +15,7 @@ import time
 # Random superposition algorithm: Fastest available algorithm, produces low quality holograms
 
 def rs(x,y,z,f,d,lam,res):
-    t=time.clock()
+    t=get_time()
 
     #creation of a list of the SLM pixels contained in the pupil
     slm_xcoord,slm_ycoord=numpy.meshgrid(numpy.linspace(-1.0,1.0,res),numpy.linspace(-1.0,1.0,res))
@@ -36,7 +38,7 @@ def rs(x,y,z,f,d,lam,res):
     slm_total_field=numpy.sum(1.0/(float(pup_coords[0].shape[0]))*numpy.exp(1j*(slm_p_phase+pists[:,None])),axis=0)
     slm_total_phase=numpy.angle(slm_total_field)
 
-    t=time.clock()-t
+    t=get_time()-t
 
     #evaluation of the algorithm performance, calculating the expected intensities of all spots
 
@@ -60,7 +62,7 @@ def rs(x,y,z,f,d,lam,res):
 # perform
 
 def gs(x,y,z,f,d,lam,res,iters):
-    t=time.clock()
+    t=get_time()
 
     #creation of a list of the SLM pixels contained in the pupil
     slm_xcoord,slm_ycoord=numpy.meshgrid(numpy.linspace(-1.0,1.0,res),numpy.linspace(-1.0,1.0,res))
@@ -93,7 +95,7 @@ def gs(x,y,z,f,d,lam,res,iters):
         pists=numpy.angle(spot_fields)
         ints=numpy.abs(spot_fields)**2
 
-    t=time.clock()-t
+    t=get_time()-t
             
     #the function returns the hologram, and a list with efficiency, uniformity and variance of the spots, and hologram computation time
     out=numpy.zeros((res,res))
@@ -106,7 +108,7 @@ def gs(x,y,z,f,d,lam,res,iters):
 # perform
 
 def wgs(x,y,z,f,d,lam,res,iters):
-    t=time.clock()
+    t=get_time()
 
     #creation of a list of the SLM pixels contained in the pupil
     slm_xcoord,slm_ycoord=numpy.meshgrid(numpy.linspace(-1.0,1.0,res),numpy.linspace(-1.0,1.0,res))
@@ -146,7 +148,7 @@ def wgs(x,y,z,f,d,lam,res,iters):
         weights=weights/numpy.sum(weights)
 
 
-    t=time.clock()-t
+    t=get_time()-t
             
     #the function returns the hologram, and a list with efficiency, uniformity and variance of the spots, and hologram computation time
     out=numpy.zeros((res,res))
@@ -161,7 +163,7 @@ def wgs(x,y,z,f,d,lam,res,iters):
 # number of spots)
 
 def csgs(x,y,z,f,d,lam,res,iters,sub):
-    t=time.clock()
+    t=get_time()
     #creation of a list of the SLM pixels contained in the pupil
     slm_xcoord,slm_ycoord=numpy.meshgrid(numpy.linspace(-1.0,1.0,res),numpy.linspace(-1.0,1.0,res))
     pup_coords=numpy.where(slm_xcoord**2+slm_ycoord**2<1.0)
@@ -204,7 +206,7 @@ def csgs(x,y,z,f,d,lam,res,iters,sub):
     slm_total_field=numpy.sum(1.0/(float(pup_coords[0].shape[0]))*numpy.exp(1j*(slm_p_phase+pists[:,None])),axis=0)
     slm_total_phase=numpy.angle(slm_total_field)
 
-    t=time.clock()-t
+    t=get_time()-t
 
 
     #evaluation of the algorithm performance, calculating the expected intensities of all spots
@@ -222,7 +224,7 @@ def csgs(x,y,z,f,d,lam,res,iters,sub):
 # (as a rule of thumb (res^2)*sub should be at least twice the number of spots)
 
 def wcsgs(x,y,z,f,d,lam,res,iters,sub):
-    t=time.clock()
+    t=get_time()
     #creation of a list of the SLM pixels contained in the pupil
     slm_xcoord,slm_ycoord=numpy.meshgrid(numpy.linspace(-1.0,1.0,res),numpy.linspace(-1.0,1.0,res))
     pup_coords=numpy.where(slm_xcoord**2+slm_ycoord**2<1.0)
@@ -275,7 +277,7 @@ def wcsgs(x,y,z,f,d,lam,res,iters,sub):
     slm_total_field=numpy.sum(weights[:,None]/(float(pup_coords[0].shape[0]))*numpy.exp(1j*(slm_p_phase+pists[:,None])),axis=0)
     slm_total_phase=numpy.angle(slm_total_field)
 
-    t=time.clock()-t
+    t=get_time()-t
 
     #evaluation of the algorithm performance, calculating the expected intensities of all spots
     spot_fields=numpy.sum(1.0/(float(pup_coords[0].shape[0]))*numpy.exp(1j*(slm_total_phase[None,:]-slm_p_phase)),axis=1)
@@ -299,41 +301,40 @@ if __name__=="__main__":
 
     performance_pars=["Efficiency : ","Uniformity : ","Variance : ","Computation time (s) : "]
 
-    print "Computing random superposition hologram:"
+    print("Computing random superposition hologram:")
 
     phase, performance=rs(x,y,z,20.0,15.0,0.488,512)
 
     for i in range(4):
-        print performance_pars[i],performance[i]
+        print(performance_pars[i],performance[i])
 
-    print "Computing Gerchberg-Saxton hologram:"
+    print("Computing Gerchberg-Saxton hologram:")
 
     phase, performance=gs(x,y,z,20.0,15.0,0.488,512,30)
     
    
     for i in range(4):
-        print performance_pars[i],performance[i]
+        print(performance_pars[i],performance[i])
 
-    print "Computing Weighted Gerchberg-Saxton hologram:"
+    print("Computing Weighted Gerchberg-Saxton hologram:")
 
     phase, performance=wgs(x,y,z,20.0,15.0,0.488,512,30)
 
     
     for i in range(4):
-        print performance_pars[i],performance[i]
+        print(performance_pars[i],performance[i])
 
-    print "Computing Compressive Sensing Gerchberg-Saxton hologram:"
+    print("Computing Compressive Sensing Gerchberg-Saxton hologram:")
 
     phase, performance=csgs(x,y,z,20.0,15.0,0.488,512,30,0.05)
 
 
     for i in range(4):
-        print performance_pars[i],performance[i]
+        print(performance_pars[i],performance[i])
 
-    print "Computing Weighted Compressive Sensing Gerchberg-Saxton hologram:"
+    print("Computing Weighted Compressive Sensing Gerchberg-Saxton hologram:")
 
     phase, performance=wcsgs(x,y,z,20.0,15.0,0.488,512,30,0.05)
 
     for i in range(4):
-        print performance_pars[i],performance[i]
-
+        print(performance_pars[i],performance[i])
